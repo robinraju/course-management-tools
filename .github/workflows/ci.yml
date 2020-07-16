@@ -95,7 +95,9 @@ jobs:
             ${{ runner.os }}-
           
       - name: Publish Local
-        run: (cd CMT && exec sbt publishLocal)
+        run: |
+          (cd CMT && exec sbt publishLocal)
+          echo "::set-env name=RELEASE_VERSION::${GITHUB_REF#*refs/tags/}"
 
       - name: Setup Coursier
         run: |
@@ -111,7 +113,7 @@ jobs:
           ./coursier bootstrap com.github.eloots:linearize_2.13:latest.release -o course-management-tools/bin/cmt-linearize --standalone --java-opt -Drun.mode=RELEASE
           ./coursier bootstrap com.github.eloots:delinearize_2.13:latest.release -o course-management-tools/bin/cmt-delinearize --standalone --java-opt -Drun.mode=RELEASE
           ./coursier bootstrap com.github.eloots:mainadm_2.13:latest.release -o course-management-tools/bin/cmt-mainadm --standalone --java-opt -Drun.mode=RELEASE
-          zip -r course-management-tools.zip course-management-tools
+          zip -r course-management-tools_${{ env.RELEASE_VERSION }}.zip course-management-tools
           
       - name: Create Github Release
         id: create_release
@@ -130,6 +132,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./course-management-tools.zip
-          asset_name: course-management-tools_${{ github.ref }}.zip
+          asset_path: ./course-management-tools_${{ env.RELEASE_VERSION }}.zip
+          asset_name: course-management-tools_${{ env.RELEASE_VERSION }}.zip
           asset_content_type: application/zip
