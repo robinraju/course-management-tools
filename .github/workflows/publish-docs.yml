@@ -25,6 +25,6 @@ jobs:
           node-version: '12'
 
       - name: Publish docs to Github Pages 🚀
-        run: |
-          echo "::set-env name=GITHUB_DEPLOY_KEY::{{secrets.GH_DEPLOY_KEY}}"
-          sbt "docs/docusaurusPublishGhpages"      
+        env:
+          GITHUB_DEPLOY_KEY: ${{secrets.GH_DEPLOY_KEY}}
+        run: sbt "docs/docusaurusPublishGhpages"      
