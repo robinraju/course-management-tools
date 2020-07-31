@@ -26,5 +26,5 @@ jobs:
 
       - name: Publish docs to Github Pages 🚀
         run: |
-          export GITHUB_DEPLOY_KEY=${{ secrets.GITHUB_TOKEN }}
+          export GITHUB_DEPLOY_KEY="$env:GITHUB_TOKEN"
           sbt "docs/docusaurusPublishGhpages"      
