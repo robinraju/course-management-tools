@@ -55,7 +55,7 @@ const siteConfig = {
     secondaryColor: '#00A900',
   },
 
-  /* Custom fonts for website */
+  /* Custom fonts for website. */
   /*
   fonts: {
     myFont: [
