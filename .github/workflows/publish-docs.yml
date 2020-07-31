@@ -7,7 +7,7 @@ on:
       - "website/**"
 
 jobs:
-  publis-docs:
+  publish-docs:
     runs-on: ubuntu-latest
 
     steps:
@@ -24,6 +24,7 @@ jobs:
         with:
           node-version: '12'
 
-      - name: Publish docs to Github Pages
+      - name: Publish docs to Github Pages 🚀
         run: |
+          export GITHUB_DEPLOY_KEY=${{ secrets.GITHUB_TOKEN }}
           sbt "docs/docusaurusPublishGhpages"      
