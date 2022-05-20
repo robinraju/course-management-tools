@@ -17,6 +17,10 @@ import sbt.io.syntax.File
 
 object Domain:
 
+  final case class CourseName(value: String)
+  object CourseName:
+    val default: CourseName = CourseName("<empty>")
+
   final case class RenumberStart(value: Int)
 
   final case class RenumberOffset(value: Int)

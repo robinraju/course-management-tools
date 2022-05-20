@@ -33,6 +33,7 @@ object AdminCliParser {
 
     OParser.sequence(
       programName("cmta"),
+      newCourseParser,
       renumCmdParser,
       duplicateInsertBeforeParser,
       studentifyCmdParser,
@@ -59,6 +60,16 @@ object AdminCliParser {
       .text("CMT configuration file")
       .action((configurationFile, options) =>
         options.copy(maybeConfigurationFile = Some(ConfigurationFile(configurationFile))))
+
+  private def newCourseParser(using builder: OParserBuilder[CliOptions]): OParser[Unit, CliOptions] =
+    import builder.*
+    cmd("new")
+      .text("Create a new course with some example exercises to get you started")
+      .action((_, options) => options.copy(command = NewCourse))
+      .children(
+        arg[String]("<course-name>")
+          .action((courseName, options) => options.copy(courseName = CourseName(courseName)))
+      )
 
   private def duplicateInsertBeforeParser(using builder: OParserBuilder[CliOptions]): OParser[Unit, CliOptions] =
     import builder.*

@@ -28,6 +28,7 @@ object Main:
 
   private def selectAndExecuteCommand(options: CliOptions): Either[String, String] =
     options.toCommand match
+      case cmd: NewCourse             => cmd.execute()
       case cmd: Studentify            => cmd.execute()
       case cmd: RenumberExercises     => cmd.execute()
       case cmd: DuplicateInsertBefore => cmd.execute()

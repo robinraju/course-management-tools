@@ -24,6 +24,8 @@ object AdminCommand:
 
   case object Version extends AdminCommand
 
+  final case class NewCourse(courseName: CourseName) extends AdminCommand
+
   final case class RenumberExercises(
       mainRepository: MainRepository,
       config: CMTaConfig,

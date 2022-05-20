@@ -23,6 +23,7 @@ sealed trait CliCommand
 object CliCommand:
   case object NoCommand extends CliCommand
   case object Version extends CliCommand
+  case object NewCourse extends CliCommand
   case object RenumberExercises extends CliCommand
   case object DuplicateInsertBefore extends CliCommand
   case object Studentify extends CliCommand
@@ -31,6 +32,7 @@ object CliCommand:
 
 final case class CliOptions(
     command: CliCommand,
+    courseName: CourseName,
     maybeRenumberStart: Option[RenumberStart],
     renumberOffset: RenumberOffset,
     renumberStep: RenumberStep,
@@ -44,6 +46,7 @@ final case class CliOptions(
 
   def toCommand: AdminCommand =
     command match
+      case NewCourse             => newCourse()
       case RenumberExercises     => renumberExercises()
       case DuplicateInsertBefore => duplicateInsertBefore()
       case Studentify            => studentify()
@@ -54,6 +57,9 @@ final case class CliOptions(
 
   private def toConfig(): CMTaConfig =
     new CMTaConfig(mainRepository.value, maybeConfigurationFile.map(_.value))
+
+  private def newCourse(): AdminCommand =
+    AdminCommand.NewCourse(courseName)
 
   private def renumberExercises(): AdminCommand =
     AdminCommand.RenumberExercises(mainRepository, toConfig(), maybeRenumberStart, renumberOffset, renumberStep)
@@ -84,6 +90,7 @@ final case class CliOptions(
 object CliOptions:
   def default(
       command: CliCommand = CliCommand.NoCommand,
+      courseName: CourseName = CourseName.default,
       maybeRenumberStart: Option[RenumberStart] = None,
       renumberOffset: RenumberOffset = RenumberOffset.default,
       renumberStep: RenumberStep = RenumberStep.default,
@@ -96,6 +103,7 @@ object CliOptions:
       maybeConfigurationFile: Option[ConfigurationFile] = None): CliOptions =
     CliOptions(
       command,
+      courseName,
       maybeRenumberStart,
       renumberOffset,
       renumberStep,
